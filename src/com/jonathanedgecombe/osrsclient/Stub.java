@@ -11,13 +11,14 @@ import java.awt.event.ComponentListener;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.lang.reflect.Field;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 
 import javax.swing.JPanel;
+
+import com.jonathanedgecombe.osrsclient.reflection.ReflectionHooks;
 
 @SuppressWarnings("serial")
 public final class Stub extends JPanel implements AppletStub {
@@ -82,19 +83,11 @@ public final class Stub extends JPanel implements AppletStub {
 		new Thread(() -> {
 			while (true) {
 				try {
-					Thread.sleep(20);
+					Thread.sleep(1000);
 
-					Field canvasField = loadClass("av").getDeclaredField("ac");
-					canvasField.setAccessible(true);
-					Object canvas = canvasField.get(null);
-
-					Field componentField = loadClass("bl").getDeclaredField("c");
-					componentField.setAccessible(true);
-					Component parent = (Component) componentField.get(canvas);
-
+					Component parent = ReflectionHooks.getCanvasParent();
 					if (!(parent instanceof CanvasWrapper)) {
-						CanvasWrapper wrapper = new CanvasWrapper(parent);
-						componentField.set(canvas, wrapper);
+						ReflectionHooks.setCanvasParent(new CanvasWrapper(parent));
 					}
 				} catch (Exception ex) {
 					ex.printStackTrace();

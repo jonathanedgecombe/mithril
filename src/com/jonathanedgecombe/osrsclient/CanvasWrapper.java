@@ -40,6 +40,8 @@ public final class CanvasWrapper extends Component {
 
 	public void paintOverlay(Graphics g) {
 		// TODO
+		g.setColor(Color.RED);
+		g.fillRect(10, 10, 10, 10);
 	}
 
 	public static class GraphicsWrapper extends Graphics {

@@ -2,6 +2,8 @@ package com.jonathanedgecombe.osrsclient;
 
 import javax.swing.JFrame;
 
+import com.jonathanedgecombe.osrsclient.reflection.ReflectionHooks;
+
 @SuppressWarnings("serial")
 public final class OSRSFrame extends JFrame {
 	private final static String TITLE = "OSRS Client";
@@ -20,6 +22,13 @@ public final class OSRSFrame extends JFrame {
 
 	public void start() {
 		stub.start();
+
+		try {
+			ReflectionHooks.init();
+		} catch (Exception e) {
+			// TODO Handle this properly
+			throw new RuntimeException(e);
+		}
 	}
 
 	public static void main(String[] args) {
