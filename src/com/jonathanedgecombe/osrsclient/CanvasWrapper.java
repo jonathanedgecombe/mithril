@@ -13,10 +13,12 @@ import java.text.AttributedCharacterIterator;
 
 @SuppressWarnings("serial")
 public final class CanvasWrapper extends Component {
+	private final OSRSFrame frame;
 	private final Component parent;
 	private GraphicsWrapper wrapper;
 
-	public CanvasWrapper(Component parent) {
+	public CanvasWrapper(OSRSFrame frame, Component parent) {
+		this.frame = frame;
 		this.parent = parent;
 		this.wrapper = new GraphicsWrapper(parent.getGraphics(), this);
 	}
@@ -38,10 +40,8 @@ public final class CanvasWrapper extends Component {
 		parent.paint(g);
 	}
 
-	public void paintOverlay(Graphics g) {
-		// TODO
-		g.setColor(Color.RED);
-		g.fillRect(10, 10, 10, 10);
+	public void tick(Graphics g) {
+		frame.tick(g);
 	}
 
 	public static class GraphicsWrapper extends Graphics {
@@ -89,7 +89,7 @@ public final class CanvasWrapper extends Component {
 
 		@Override
 		public boolean drawImage(Image img, int x, int y, ImageObserver observer) {
-			wrapper.paintOverlay(img.getGraphics());
+			wrapper.tick(img.getGraphics());
 			return g.drawImage(img, x, y, observer);
 		}
 

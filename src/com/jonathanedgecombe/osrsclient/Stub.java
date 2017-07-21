@@ -28,10 +28,13 @@ public final class Stub extends JPanel implements AppletStub {
 	private final static int DEFAULT_WIDTH = 765, DEFAULT_HEIGHT = 503;
 	private final static Dimension DEFAULT_DIMENSION = new Dimension(DEFAULT_WIDTH, DEFAULT_HEIGHT);
 
+	private final OSRSFrame frame;
 	private final Map<String, String> parameters = new HashMap<>();
 	private final Applet client;
 
-	public Stub(Container container) {
+	public Stub(OSRSFrame frame, Container container) {
+		this.frame = frame;
+
 		try {
 			fetchConfig();
 		} catch (MalformedURLException e) {
@@ -87,7 +90,7 @@ public final class Stub extends JPanel implements AppletStub {
 
 					Component parent = ReflectionHooks.getCanvasParent();
 					if (!(parent instanceof CanvasWrapper)) {
-						ReflectionHooks.setCanvasParent(new CanvasWrapper(parent));
+						ReflectionHooks.setCanvasParent(new CanvasWrapper(frame, parent));
 					}
 				} catch (Exception ex) {
 					ex.printStackTrace();
