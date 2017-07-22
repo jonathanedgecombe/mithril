@@ -1,11 +1,11 @@
-package com.jonathanedgecombe.osrsclient.module;
+package com.mithrilclient.module;
 
 import java.awt.AlphaComposite;
 import java.awt.Color;
 import java.awt.Graphics2D;
 
-import com.jonathanedgecombe.osrsclient.reflection.ReflectionHooks;
-import com.jonathanedgecombe.osrsclient.util.Skills;
+import com.mithrilclient.reflection.ReflectionHooks;
+import com.mithrilclient.util.Skills;
 
 public final class PrayerPotionModule extends Module {
 	private final static int X = 216, Y = 102;

@@ -1,4 +1,4 @@
-package com.jonathanedgecombe.osrsclient.reflection;
+package com.mithrilclient.reflection;
 
 import java.lang.reflect.Field;
 

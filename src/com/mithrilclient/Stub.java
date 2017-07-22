@@ -1,4 +1,4 @@
-package com.jonathanedgecombe.osrsclient;
+package com.mithrilclient;
 import java.applet.Applet;
 import java.applet.AppletContext;
 import java.applet.AppletStub;
@@ -18,7 +18,7 @@ import java.util.Map;
 
 import javax.swing.JPanel;
 
-import com.jonathanedgecombe.osrsclient.reflection.ReflectionHooks;
+import com.mithrilclient.reflection.ReflectionHooks;
 
 @SuppressWarnings("serial")
 public final class Stub extends JPanel implements AppletStub {

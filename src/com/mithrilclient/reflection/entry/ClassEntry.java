@@ -1,6 +1,6 @@
-package com.jonathanedgecombe.osrsclient.reflection.entry;
+package com.mithrilclient.reflection.entry;
 
-import com.jonathanedgecombe.osrsclient.reflection.ReflectionUtils;
+import com.mithrilclient.reflection.ReflectionUtils;
 
 public final class ClassEntry extends Entry {
 	private final String className;

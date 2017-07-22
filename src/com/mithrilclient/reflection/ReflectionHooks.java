@@ -1,10 +1,10 @@
-package com.jonathanedgecombe.osrsclient.reflection;
+package com.mithrilclient.reflection;
 
 import java.awt.Component;
 
-import com.jonathanedgecombe.osrsclient.reflection.entry.ClassEntry;
-import com.jonathanedgecombe.osrsclient.reflection.entry.FieldEntry;
-import com.jonathanedgecombe.osrsclient.reflection.entry.StaticFieldEntry;
+import com.mithrilclient.reflection.entry.ClassEntry;
+import com.mithrilclient.reflection.entry.FieldEntry;
+import com.mithrilclient.reflection.entry.StaticFieldEntry;
 
 public final class ReflectionHooks {
 	private final static ClassEntry CANVAS_ENTRY_PARENT_CLASS = new ClassEntry("av");

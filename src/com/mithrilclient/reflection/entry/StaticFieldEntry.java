@@ -1,8 +1,8 @@
-package com.jonathanedgecombe.osrsclient.reflection.entry;
+package com.mithrilclient.reflection.entry;
 
 import java.lang.reflect.Field;
 
-import com.jonathanedgecombe.osrsclient.reflection.ReflectionUtils;
+import com.mithrilclient.reflection.ReflectionUtils;
 
 public final class StaticFieldEntry<T> extends AbstractFieldEntry<T> {
 	private final ClassEntry classEntry;

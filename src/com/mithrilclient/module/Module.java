@@ -1,4 +1,4 @@
-package com.jonathanedgecombe.osrsclient.module;
+package com.mithrilclient.module;
 
 import java.awt.Graphics2D;
 import java.util.List;

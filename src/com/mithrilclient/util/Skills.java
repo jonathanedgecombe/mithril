@@ -1,4 +1,4 @@
-package com.jonathanedgecombe.osrsclient.util;
+package com.mithrilclient.util;
 
 public final class Skills {
 	public final static String[] SKILL_NAMES = {

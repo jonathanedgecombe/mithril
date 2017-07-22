@@ -1,4 +1,4 @@
-package com.jonathanedgecombe.osrsclient;
+package com.mithrilclient;
 
 import java.awt.Color;
 import java.awt.Component;

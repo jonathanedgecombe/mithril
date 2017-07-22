@@ -1,4 +1,4 @@
-package com.jonathanedgecombe.osrsclient;
+package com.mithrilclient;
 
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -10,8 +10,8 @@ import java.util.concurrent.TimeUnit;
 
 import javax.swing.JFrame;
 
-import com.jonathanedgecombe.osrsclient.module.Module;
-import com.jonathanedgecombe.osrsclient.reflection.ReflectionHooks;
+import com.mithrilclient.module.Module;
+import com.mithrilclient.reflection.ReflectionHooks;
 
 @SuppressWarnings("serial")
 public final class OSRSFrame extends JFrame {

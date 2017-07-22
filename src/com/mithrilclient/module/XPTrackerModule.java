@@ -1,11 +1,11 @@
-package com.jonathanedgecombe.osrsclient.module;
+package com.mithrilclient.module;
 
 import java.awt.AlphaComposite;
 import java.awt.Color;
 import java.awt.Graphics2D;
 
-import com.jonathanedgecombe.osrsclient.reflection.ReflectionHooks;
-import com.jonathanedgecombe.osrsclient.util.Skills;
+import com.mithrilclient.reflection.ReflectionHooks;
+import com.mithrilclient.util.Skills;
 
 public final class XPTrackerModule extends Module {
 	private final static int X = 5, Y = 21;
@@ -58,19 +58,21 @@ public final class XPTrackerModule extends Module {
 
 		double percent = (double) (delta * 100) / range;
 
-		g.setComposite(AlphaComposite.SrcOver.derive(0.67f));
+		g.setComposite(AlphaComposite.SrcOver.derive(0.5f));
 
 		g.setColor(Color.GRAY);
 		g.fillRect(X, Y, 109, 38);
 		g.setColor(Color.WHITE);
 		g.drawRect(X, Y, 109, 38);
 
+		g.setColor(Color.BLACK);
+		g.fillRect(X + 5, Y + 20, 100, 14);
+
 		g.setComposite(AlphaComposite.SrcOver);
 
+		g.drawString(Skills.SKILL_NAMES[lastSkillTrained], X + 5, Y + 15);
+		g.setColor(Color.WHITE);
 		g.drawString(Skills.SKILL_NAMES[lastSkillTrained], X + 4, Y + 14);
-
-		g.setColor(Color.DARK_GRAY);
-		g.fillRect(X + 5, Y + 20, 100, 14);
 
 		g.setColor(Color.WHITE);
 		g.fillRect(X + 5, Y + 20, (int) percent, 14);
