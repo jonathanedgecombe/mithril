@@ -13,12 +13,12 @@ import java.text.AttributedCharacterIterator;
 
 @SuppressWarnings("serial")
 public final class CanvasWrapper extends Component {
-	private final OSRSFrame frame;
+	private final MithrilClient mithrilClient;
 	private final Component parent;
 	private GraphicsWrapper wrapper;
 
-	public CanvasWrapper(OSRSFrame frame, Component parent) {
-		this.frame = frame;
+	public CanvasWrapper(MithrilClient mithrilClient, Component parent) {
+		this.mithrilClient = mithrilClient;
 		this.parent = parent;
 		this.wrapper = new GraphicsWrapper(parent.getGraphics(), this);
 	}
@@ -41,7 +41,7 @@ public final class CanvasWrapper extends Component {
 	}
 
 	public void tick(Graphics g) {
-		frame.tick(g);
+		mithrilClient.tick(g);
 	}
 
 	public static class GraphicsWrapper extends Graphics {

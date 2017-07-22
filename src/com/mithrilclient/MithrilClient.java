@@ -14,7 +14,7 @@ import com.mithrilclient.module.Module;
 import com.mithrilclient.reflection.ReflectionHooks;
 
 @SuppressWarnings("serial")
-public final class OSRSFrame extends JFrame {
+public final class MithrilClient extends JFrame {
 	private final static String TITLE = "OSRS Client";
 
 	private final ThreadPoolExecutor executor = new ThreadPoolExecutor(1, Runtime.getRuntime().availableProcessors(), 16, TimeUnit.SECONDS, new ArrayBlockingQueue<>(65536));
@@ -22,7 +22,7 @@ public final class OSRSFrame extends JFrame {
 	private final Stub stub;
 	private final List<Module> modules = new ArrayList<>();
 
-	public OSRSFrame() {
+	public MithrilClient() {
 		super(TITLE);
 
 		stub = new Stub(this, getContentPane());
@@ -57,6 +57,6 @@ public final class OSRSFrame extends JFrame {
 	}
 
 	public static void main(String[] args) {
-		new OSRSFrame().start();
+		new MithrilClient().start();
 	}
 }
