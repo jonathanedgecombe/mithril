@@ -47,8 +47,11 @@ public final class OSRSFrame extends JFrame {
 	public void tick(Graphics g) {
 		Graphics2D g2d = (Graphics2D) g;
 
+		int width = stub.getWidth();
+		int height = stub.getHeight();
+
 		for (Module module : modules) {
-			module.paint(g2d);
+			module.paint(g2d, width, height);
 			executor.execute(() -> module.tick());
 		}
 	}

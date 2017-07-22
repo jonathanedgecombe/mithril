@@ -44,7 +44,7 @@ public final class XPTrackerModule extends Module {
 	}
 
 	@Override
-	public synchronized void paint(Graphics2D g) {
+	public synchronized void paint(Graphics2D g, int width, int height) {
 		if (lastSkillTrained == -1) return;
 
 		int[] levels = ReflectionHooks.getBaseSkills();
