@@ -9,7 +9,7 @@ import com.mithrilclient.resource.Image;
 import com.mithrilclient.util.Skills;
 
 public final class XPTrackerModule extends Module {
-	private final static Color GREEN = new Color(0, 192, 0);
+	private final static Color GREEN = new Color(0, 127, 0);
 
 	private final static int X = 5, Y = 21;
 
