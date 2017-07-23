@@ -48,11 +48,13 @@ public final class XPTrackerModule extends Module {
 	
 			g.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_OFF);
 			g.setFont(g.getFont().deriveFont(12f));
+
+			String skillText = Skills.SKILL_NAMES[skill] + " (" + currentLevel + ")";
 	
 			g.setColor(Color.BLACK);
-			g.drawString(Skills.SKILL_NAMES[skill], x + 12, y + 22);
+			g.drawString(skillText, x + 12, y + 22);
 			g.setColor(Color.WHITE);
-			g.drawString(Skills.SKILL_NAMES[skill], x + 11, y + 21);
+			g.drawString(skillText, x + 11, y + 21);
 	
 			g.setFont(g.getFont().deriveFont(11f));
 	
