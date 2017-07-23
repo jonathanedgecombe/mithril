@@ -1,6 +1,8 @@
 bin
 lib
+target
 .*
 *.sw*
 *~*
+config.json
 !.gitignore

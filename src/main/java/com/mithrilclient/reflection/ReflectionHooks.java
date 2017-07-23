@@ -4,6 +4,7 @@ import java.awt.Component;
 
 import com.mithrilclient.reflection.entry.ClassEntry;
 import com.mithrilclient.reflection.entry.FieldEntry;
+import com.mithrilclient.reflection.entry.ObfuscatedIntStaticFieldEntry;
 import com.mithrilclient.reflection.entry.StaticFieldEntry;
 
 public final class ReflectionHooks {
@@ -20,6 +21,9 @@ public final class ReflectionHooks {
 
 	private final static ClassEntry LOGIN_CONTROLLER_CLASS = new ClassEntry("cu");
 	private final static StaticFieldEntry<String> USERNAME_FIELD = new StaticFieldEntry<>(LOGIN_CONTROLLER_CLASS, "ad");
+	private final static StaticFieldEntry<Integer> CURSOR_FIELD_FIELD = new ObfuscatedIntStaticFieldEntry(LOGIN_CONTROLLER_CLASS, "aa", 1056528165, -155548924);
+	private final static StaticFieldEntry<Integer> LOGIN_STATE_FIELD = new ObfuscatedIntStaticFieldEntry(LOGIN_CONTROLLER_CLASS, "ak", -1832063215, 161866225);
+	private final static StaticFieldEntry<String> LOGIN_MESSAGE_FIELD = new StaticFieldEntry<>(LOGIN_CONTROLLER_CLASS, "at");
 
 	public static void init() throws NoSuchFieldException, SecurityException, ClassNotFoundException {
 		CANVAS_ENTRY_PARENT_CLASS.init();
@@ -35,6 +39,9 @@ public final class ReflectionHooks {
 
 		LOGIN_CONTROLLER_CLASS.init();
 		USERNAME_FIELD.init();
+		CURSOR_FIELD_FIELD.init();
+		LOGIN_STATE_FIELD.init();
+		LOGIN_MESSAGE_FIELD.init();
 	}
 
 	public static Component getCanvasParent() {
@@ -61,7 +68,27 @@ public final class ReflectionHooks {
 		return USERNAME_FIELD.get();
 	}
 
-	public void setUsername(String username) {
+	public static void setUsername(String username) {
 		USERNAME_FIELD.set(username);
+	}
+
+	public static int getLoginCursorField() {
+		return CURSOR_FIELD_FIELD.get();
+	}
+
+	public static void setLoginCursorField(int field) {
+		CURSOR_FIELD_FIELD.set(field);
+	}
+
+	public static int getLoginState() {
+		return LOGIN_STATE_FIELD.get();
+	}
+
+	public static void setLoginState(int state) {
+		LOGIN_STATE_FIELD.set(state);
+	}
+
+	public static void setLoginMessage(String message) {
+		LOGIN_MESSAGE_FIELD.set(message);
 	}
 }

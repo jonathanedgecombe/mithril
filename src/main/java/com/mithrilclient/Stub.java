@@ -11,7 +11,6 @@ import java.awt.event.ComponentListener;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.lang.reflect.Field;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.HashMap;
@@ -19,11 +18,12 @@ import java.util.Map;
 
 import javax.swing.JPanel;
 
+import com.mithrilclient.config.ConfigManager;
 import com.mithrilclient.reflection.ReflectionHooks;
 
 @SuppressWarnings("serial")
 public final class Stub extends JPanel implements AppletStub {
-	private final static String BASE_URL = "http://oldschool1.runescape.com/";
+	private final static String BASE_URL = "http://oldschool" + ConfigManager.CONFIG.getDefaultWorld() + ".runescape.com/";
 	private final static String CONFIG_URL = BASE_URL + "jav_config.ws";
 
 	private final static int DEFAULT_WIDTH = 765, DEFAULT_HEIGHT = 503;
@@ -87,26 +87,19 @@ public final class Stub extends JPanel implements AppletStub {
 		new Thread(() -> {
 			while (true) {
 				try {
-					Thread.sleep(1000);
+					Thread.sleep(20);
+
+					if (!mithrilClient.isInitialized()) continue;
 
 					Component parent = ReflectionHooks.getCanvasParent();
 					if (!(parent instanceof CanvasWrapper)) {
 						ReflectionHooks.setCanvasParent(new CanvasWrapper(mithrilClient, parent));
 					}
-
-					Field field = loadClass("cu").getDeclaredField("ad");
-					field.setAccessible(true);
-					String name = (String) field.get(null);
-					System.out.println(name);
 				} catch (Exception ex) {
 					ex.printStackTrace();
 				}
 			}
 		}).start();
-	}
-
-	public static Class<?> loadClass(String name) throws Exception {
-		return Stub.class.getClassLoader().loadClass(name);
 	}
 
 	public void fetchConfig() throws MalformedURLException, IOException {

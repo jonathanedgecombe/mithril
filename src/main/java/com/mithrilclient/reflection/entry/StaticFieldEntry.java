@@ -4,10 +4,10 @@ import java.lang.reflect.Field;
 
 import com.mithrilclient.reflection.ReflectionUtils;
 
-public final class StaticFieldEntry<T> extends AbstractFieldEntry<T> {
+public class StaticFieldEntry<T> extends AbstractFieldEntry<T> {
 	private final ClassEntry classEntry;
 	private final String fieldName;
-	private Field field;
+	protected Field field;
 
 	public StaticFieldEntry(ClassEntry classEntry, String fieldName) {
 		this.classEntry = classEntry;
