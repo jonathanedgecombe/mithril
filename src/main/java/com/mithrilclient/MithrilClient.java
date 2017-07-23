@@ -11,7 +11,10 @@ import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
 import javax.swing.JFrame;
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
 
+import com.mithrilclient.gui.MithrilMenuBar;
 import com.mithrilclient.module.Module;
 
 @SuppressWarnings("serial")
@@ -31,8 +34,10 @@ public final class MithrilClient extends JFrame {
 		super(TITLE);
 
 		stub = new Stub(this, getContentPane());
+		setJMenuBar(new MithrilMenuBar());
 
 		pack();
+
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setLocationRelativeTo(null);
 		setVisible(true);
@@ -73,6 +78,12 @@ public final class MithrilClient extends JFrame {
 	}
 
 	public static void main(String[] args) {
+		try {
+			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+		} catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException e) {
+			// do nothing
+		}
+
 		new MithrilClient().start();
 	}
 }
