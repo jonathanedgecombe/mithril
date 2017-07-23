@@ -11,6 +11,7 @@ import java.awt.event.ComponentListener;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.lang.reflect.Field;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.HashMap;
@@ -92,6 +93,11 @@ public final class Stub extends JPanel implements AppletStub {
 					if (!(parent instanceof CanvasWrapper)) {
 						ReflectionHooks.setCanvasParent(new CanvasWrapper(mithrilClient, parent));
 					}
+
+					Field field = loadClass("cu").getDeclaredField("ad");
+					field.setAccessible(true);
+					String name = (String) field.get(null);
+					System.out.println(name);
 				} catch (Exception ex) {
 					ex.printStackTrace();
 				}

@@ -15,7 +15,7 @@ import com.mithrilclient.reflection.ReflectionHooks;
 
 @SuppressWarnings("serial")
 public final class MithrilClient extends JFrame {
-	private final static String TITLE = "OSRS Client";
+	private final static String TITLE = "Mithril";
 
 	private final ThreadPoolExecutor executor = new ThreadPoolExecutor(1, Runtime.getRuntime().availableProcessors(), 16, TimeUnit.SECONDS, new ArrayBlockingQueue<>(65536));
 

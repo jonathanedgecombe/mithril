@@ -18,6 +18,9 @@ public final class ReflectionHooks {
 	private final static StaticFieldEntry<int[]> SKILLS_FIELD = new StaticFieldEntry<>(CLIENT_CLASS, "jp");
 	private final static StaticFieldEntry<int[]> BASE_SKILLS_FIELD = new StaticFieldEntry<>(CLIENT_CLASS, "jn");
 
+	private final static ClassEntry LOGIN_CONTROLLER_CLASS = new ClassEntry("cu");
+	private final static StaticFieldEntry<String> USERNAME_FIELD = new StaticFieldEntry<>(LOGIN_CONTROLLER_CLASS, "ad");
+
 	public static void init() throws NoSuchFieldException, SecurityException, ClassNotFoundException {
 		CANVAS_ENTRY_PARENT_CLASS.init();
 		CANVAS_ENTRY.init();
@@ -29,6 +32,9 @@ public final class ReflectionHooks {
 		XP_FIELD.init();
 		SKILLS_FIELD.init();
 		BASE_SKILLS_FIELD.init();
+
+		LOGIN_CONTROLLER_CLASS.init();
+		USERNAME_FIELD.init();
 	}
 
 	public static Component getCanvasParent() {
@@ -49,5 +55,13 @@ public final class ReflectionHooks {
 
 	public static int[] getBaseSkills() {
 		return BASE_SKILLS_FIELD.get();
+	}
+
+	public static String getUsername() {
+		return USERNAME_FIELD.get();
+	}
+
+	public void setUsername(String username) {
+		USERNAME_FIELD.set(username);
 	}
 }
