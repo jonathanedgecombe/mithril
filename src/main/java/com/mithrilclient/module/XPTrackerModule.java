@@ -1,13 +1,16 @@
 package com.mithrilclient.module;
 
-import java.awt.AlphaComposite;
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.awt.RenderingHints;
 
 import com.mithrilclient.reflection.ReflectionHooks;
+import com.mithrilclient.resource.Image;
 import com.mithrilclient.util.Skills;
 
 public final class XPTrackerModule extends Module {
+	private final static Color GREEN = new Color(0, 192, 0);
+
 	private final static int X = 5, Y = 21;
 
 	private int[] lastXpLevels = new int[Skills.NUM_SKILLS];
@@ -58,23 +61,30 @@ public final class XPTrackerModule extends Module {
 
 		double percent = (double) (delta * 100) / range;
 
-		g.setComposite(AlphaComposite.SrcOver.derive(0.5f));
+		g.setColor(Color.DARK_GRAY);
+		g.fillRect(X + 11, Y + 28, 100, 12);
 
-		g.setColor(Color.GRAY);
-		g.fillRect(X, Y, 109, 38);
-		g.setColor(Color.WHITE);
-		g.drawRect(X, Y, 109, 38);
+		g.setColor(GREEN);
+		g.fillRect(X + 11, Y + 28, (int) percent, 12);
+
+		g.drawImage(Image.XP_TRACKER_OVERLAY, X, Y, null);
+
+		g.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_OFF);
+		g.setFont(g.getFont().deriveFont(12f));
 
 		g.setColor(Color.BLACK);
-		g.fillRect(X + 5, Y + 20, 100, 14);
-
-		g.setComposite(AlphaComposite.SrcOver);
-
-		g.drawString(Skills.SKILL_NAMES[lastSkillTrained], X + 5, Y + 15);
+		g.drawString(Skills.SKILL_NAMES[lastSkillTrained], X + 12, Y + 22);
 		g.setColor(Color.WHITE);
-		g.drawString(Skills.SKILL_NAMES[lastSkillTrained], X + 4, Y + 14);
+		g.drawString(Skills.SKILL_NAMES[lastSkillTrained], X + 11, Y + 21);
 
+		g.setFont(g.getFont().deriveFont(11f));
+
+		String progress = (Math.round(percent)) + "%";
+		int offset = g.getFontMetrics().stringWidth(progress) / 2;
+
+		g.setColor(Color.BLACK);
+		g.drawString(progress, X + 62 - offset, Y + 39);
 		g.setColor(Color.WHITE);
-		g.fillRect(X + 5, Y + 20, (int) percent, 14);
+		g.drawString(progress, X + 61 - offset, Y + 38);
 	}
 }

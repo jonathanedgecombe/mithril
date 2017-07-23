@@ -5,6 +5,7 @@ import java.io.BufferedWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.mithrilclient.MithrilClient;
 
 public final class ConfigManager {
@@ -33,7 +34,7 @@ public final class ConfigManager {
 
 	public static void writeConfig(Config config) throws IOException {
 		try (BufferedWriter writer = Files.newBufferedWriter(MithrilClient.CONFIG_PATH)) {
-			new Gson().toJson(config, writer);
+			new GsonBuilder().setPrettyPrinting().create().toJson(config, writer);
 		}
 	}
 }
