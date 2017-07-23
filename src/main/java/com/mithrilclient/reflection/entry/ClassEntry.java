@@ -8,6 +8,12 @@ public final class ClassEntry extends Entry {
 
 	public ClassEntry(String className) {
 		this.className = className;
+
+		try {
+			init();
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
 	}
 
 	public void init() throws ClassNotFoundException {

@@ -8,7 +8,7 @@ import com.google.gson.Gson;
 import com.mithrilclient.MithrilClient;
 
 public final class ConfigManager {
-	private final static Config DEFAULT_CONFIG = new Config("", 1);
+	private final static Config DEFAULT_CONFIG = new Config();
 
 	public static Config CONFIG;
 

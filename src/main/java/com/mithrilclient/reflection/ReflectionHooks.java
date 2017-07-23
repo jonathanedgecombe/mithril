@@ -25,25 +25,6 @@ public final class ReflectionHooks {
 	private final static StaticFieldEntry<Integer> LOGIN_STATE_FIELD = new ObfuscatedIntStaticFieldEntry(LOGIN_CONTROLLER_CLASS, "ak", -1832063215, 161866225);
 	private final static StaticFieldEntry<String> LOGIN_MESSAGE_FIELD = new StaticFieldEntry<>(LOGIN_CONTROLLER_CLASS, "at");
 
-	public static void init() throws NoSuchFieldException, SecurityException, ClassNotFoundException {
-		CANVAS_ENTRY_PARENT_CLASS.init();
-		CANVAS_ENTRY.init();
-
-		CANVAS_CLASS.init();
-		COMPONENT_FIELD.init();
-
-		CLIENT_CLASS.init();
-		XP_FIELD.init();
-		SKILLS_FIELD.init();
-		BASE_SKILLS_FIELD.init();
-
-		LOGIN_CONTROLLER_CLASS.init();
-		USERNAME_FIELD.init();
-		CURSOR_FIELD_FIELD.init();
-		LOGIN_STATE_FIELD.init();
-		LOGIN_MESSAGE_FIELD.init();
-	}
-
 	public static Component getCanvasParent() {
 		return COMPONENT_FIELD.get();
 	}

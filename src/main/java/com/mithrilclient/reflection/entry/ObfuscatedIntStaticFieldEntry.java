@@ -8,6 +8,12 @@ public final class ObfuscatedIntStaticFieldEntry extends StaticFieldEntry<Intege
 
 		this.setMultiplier = setMultiplier;
 		this.getMultiplier = getMultiplier;
+
+		try {
+			init();
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
 	}
 
 	public Integer get() throws IllegalArgumentException {

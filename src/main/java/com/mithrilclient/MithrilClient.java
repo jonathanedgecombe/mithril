@@ -13,7 +13,6 @@ import java.util.concurrent.TimeUnit;
 import javax.swing.JFrame;
 
 import com.mithrilclient.module.Module;
-import com.mithrilclient.reflection.ReflectionHooks;
 
 @SuppressWarnings("serial")
 public final class MithrilClient extends JFrame {
@@ -26,6 +25,7 @@ public final class MithrilClient extends JFrame {
 	private final List<Module> modules = new ArrayList<>();
 
 	private boolean initialized = false;
+	private boolean firstTick = true;
 
 	public MithrilClient() {
 		super(TITLE);
@@ -41,19 +41,7 @@ public final class MithrilClient extends JFrame {
 	public void start() {
 		Module.initModules(modules);
 		stub.start();
-
-		try {
-			ReflectionHooks.init();
-
-			for (Module module : modules) {
-				module.init();
-			}
-
-			setInitialized();
-		} catch (Exception e) {
-			// TODO Handle this properly
-			throw new RuntimeException(e);
-		}
+		setInitialized();
 	}
 
 	private synchronized void setInitialized() {
@@ -70,9 +58,17 @@ public final class MithrilClient extends JFrame {
 		int width = stub.getWidth();
 		int height = stub.getHeight();
 
+		if (firstTick) {
+			for (Module module : modules) {
+				module.init();
+			}
+
+			firstTick = false;
+		}
+
 		for (Module module : modules) {
 			module.paint(g2d, width, height);
-			executor.execute(() -> module.tick());
+			executor.execute(module::tick);
 		}
 	}
 

@@ -14,6 +14,12 @@ public final class FieldEntry<T, U> extends AbstractFieldEntry<T> {
 		this.classEntry = classEntry;
 		this.instance = instance;
 		this.fieldName = fieldName;
+
+		try {
+			init();
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
 	}
 
 	public void init() throws NoSuchFieldException, SecurityException, ClassNotFoundException {

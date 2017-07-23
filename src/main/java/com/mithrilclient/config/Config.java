@@ -1,13 +1,8 @@
 package com.mithrilclient.config;
 
 public final class Config {
-	private String defaultUsername;
-	private int defaultWorld;
-
-	public Config(String defaultUsername, int defaultWorld) {
-		this.defaultUsername = defaultUsername;
-		this.setDefaultWorld(defaultWorld);
-	}
+	private String defaultUsername = "";
+	private int defaultWorld = 1;
 
 	public String getDefaultUsername() {
 		return defaultUsername;
@@ -18,7 +13,7 @@ public final class Config {
 	}
 
 	public int getDefaultWorld() {
-		return defaultWorld == 0 ? 1 : defaultWorld;
+		return defaultWorld;
 	}
 
 	public void setDefaultWorld(int defaultWorld) {

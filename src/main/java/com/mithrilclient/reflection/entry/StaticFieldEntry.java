@@ -12,6 +12,12 @@ public class StaticFieldEntry<T> extends AbstractFieldEntry<T> {
 	public StaticFieldEntry(ClassEntry classEntry, String fieldName) {
 		this.classEntry = classEntry;
 		this.fieldName = fieldName;
+
+		try {
+			init();
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
 	}
 
 	public void init() throws NoSuchFieldException, SecurityException, ClassNotFoundException {

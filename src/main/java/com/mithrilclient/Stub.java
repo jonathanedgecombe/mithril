@@ -104,9 +104,8 @@ public final class Stub extends JPanel implements AppletStub {
 
 	public void fetchConfig() throws MalformedURLException, IOException {
 		try (BufferedReader reader = new BufferedReader(new InputStreamReader(new URL(CONFIG_URL).openStream()))) {
-			while (true) {
-				String line = reader.readLine();
-				if (line == null) break;
+			String line;
+			while ((line = reader.readLine()) != null) {
 
 				String[] parts = line.split("=", 3);
 				switch (parts[0]) {
@@ -128,7 +127,6 @@ public final class Stub extends JPanel implements AppletStub {
 
 	@Override
 	public AppletContext getAppletContext() {
-		System.out.println("getAppletContext");
 		return null;
 	}
 
