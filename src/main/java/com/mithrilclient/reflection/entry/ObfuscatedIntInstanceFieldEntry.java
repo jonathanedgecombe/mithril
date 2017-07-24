@@ -1,9 +1,9 @@
 package com.mithrilclient.reflection.entry;
 
-public final class ObfuscatedIntStaticFieldEntry extends StaticFieldEntry<Integer> {
+public final class ObfuscatedIntInstanceFieldEntry extends InstanceFieldEntry<Integer> {
 	private final int setMultiplier, getMultiplier;
 
-	public ObfuscatedIntStaticFieldEntry(ClassEntry classEntry, String fieldName, int setMultiplier, int getMultiplier) {
+	public ObfuscatedIntInstanceFieldEntry(ClassEntry classEntry, String fieldName, int setMultiplier, int getMultiplier) {
 		super(classEntry, fieldName);
 
 		this.setMultiplier = setMultiplier;
@@ -16,19 +16,17 @@ public final class ObfuscatedIntStaticFieldEntry extends StaticFieldEntry<Intege
 		}
 	}
 
-	@Override
-	public Integer get() throws IllegalArgumentException {
+	public <U> Integer get(U instance) throws IllegalArgumentException {
 		try {
-			return ((Integer) field.get(null)) * getMultiplier;
+			return ((Integer) field.get(instance)) * getMultiplier;
 		} catch (IllegalAccessException e) {
 			throw new RuntimeException(e);
 		}
 	}
 
-	@Override
-	public void set(Integer value) throws IllegalArgumentException {
+	public <U> void set(U instance, Integer value) throws IllegalArgumentException {
 		try {
-			field.set(null, value * setMultiplier);
+			field.set(instance, value * setMultiplier);
 		} catch (IllegalAccessException e) {
 			throw new RuntimeException(e);
 		}

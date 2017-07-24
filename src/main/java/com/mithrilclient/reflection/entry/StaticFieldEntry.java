@@ -26,6 +26,7 @@ public class StaticFieldEntry<T> extends AbstractFieldEntry<T> {
 	}
 
 	@SuppressWarnings("unchecked")
+	@Override
 	public T get() throws IllegalArgumentException {
 		try {
 			return (T) field.get(null);

@@ -4,15 +4,13 @@ import java.lang.reflect.Field;
 
 import com.mithrilclient.reflection.ReflectionUtils;
 
-public final class FieldEntry<T, U> extends AbstractFieldEntry<T> {
+public class InstanceFieldEntry<T> {
 	private final ClassEntry classEntry;
-	private final AbstractFieldEntry<U> instance;
 	private final String fieldName;
-	private Field field;
+	protected Field field;
 
-	public FieldEntry(ClassEntry classEntry, AbstractFieldEntry<U> instance, String fieldName) {
+	public InstanceFieldEntry(ClassEntry classEntry, String fieldName) {
 		this.classEntry = classEntry;
-		this.instance = instance;
 		this.fieldName = fieldName;
 
 		try {
@@ -28,19 +26,17 @@ public final class FieldEntry<T, U> extends AbstractFieldEntry<T> {
 	}
 
 	@SuppressWarnings("unchecked")
-	@Override
-	public T get() throws IllegalArgumentException {
+	public <U> T get(U instance) throws IllegalArgumentException {
 		try {
-			return (T) field.get(instance.get());
+			return (T) field.get(instance);
 		} catch (IllegalAccessException e) {
 			throw new RuntimeException(e);
 		}
 	}
 
-	@Override
-	public void set(T value) throws IllegalArgumentException {
+	public <U> void set(U instance, T value) throws IllegalArgumentException {
 		try {
-			field.set(instance.get(), value);
+			field.set(instance, value);
 		} catch (IllegalAccessException e) {
 			throw new RuntimeException(e);
 		}

@@ -20,5 +20,6 @@ public abstract class Module {
 		modules.add(new XPTrackerModule());
 		modules.add(new PrayerPotionModule());
 		modules.add(new LoginDetailsModule());
+		modules.add(new GroundItemModule());
 	}
 }
