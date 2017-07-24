@@ -172,13 +172,13 @@ public final class ReflectionHooks {
 
 		if (ix < 0 || iy < 0 || ix > 103 || iy > 103) return null;
 
-		int k1 = ex & 0x7f;
-		int l1 = ey & 0x7f;
-		int i2 = pixelHeightGroundArray[h][ix][iy] * (128 - k1)
-				+ pixelHeightGroundArray[h][ix + 1][iy] * k1 >> 7;
-		int j2 = pixelHeightGroundArray[h][ix][iy + 1] * (128 - k1)
-				+ pixelHeightGroundArray[h][ix + 1][iy + 1] * k1 >> 7;
-		int ez = (i2 * (128 - l1) + j2 * l1 >> 7);
+		int mx = ex & 0x7f;
+		int my = ey & 0x7f;
+		int h1 = pixelHeightGroundArray[h][ix][iy] * (128 - mx)
+				+ pixelHeightGroundArray[h][ix + 1][iy] * mx >> 7;
+		int h2 = pixelHeightGroundArray[h][ix][iy + 1] * (128 - mx)
+				+ pixelHeightGroundArray[h][ix + 1][iy + 1] * mx >> 7;
+		int ez = (h1 * (128 - my) + h2 * my >> 7);
 
 		ex -= CAMERA_X_FIELD.get();
 		ez -= CAMERA_Z_FIELD.get();
