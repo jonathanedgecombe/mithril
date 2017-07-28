@@ -44,13 +44,5 @@ public final class SkillsHook extends Hook {
 		writer.write("		levelsHook = new FieldHook<>(classLoader, \"" + clazz.name + "\", \"" + ((FieldInsnNode) match.get(0)).name + "\");\n");
 		writer.write("		baseLevelsHook = new FieldHook<>(classLoader, \"" + clazz.name + "\", \"" + ((FieldInsnNode) match.get(1)).name + "\");\n");
 		writer.write("\n");
-		// TODO Auto-generated method stub
-		/*regex.match(method).ifPresent((match) -> {*/
-		/*System.out.println(clazz.name);
-		System.out.println("levels -> " + ((FieldInsnNode) match.get(0)).name);
-		System.out.println("base levels -> " + ((FieldInsnNode) match.get(1)).name);
-		System.out.println("xp -> " + ((FieldInsnNode) match.get(2)).name);
-		System.out.println();*/
-	//});*/
 	}
 }
