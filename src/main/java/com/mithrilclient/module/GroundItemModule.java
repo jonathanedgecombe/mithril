@@ -10,15 +10,15 @@ import com.mithrilclient.reflection.ReflectionHooks;
 
 public final class GroundItemModule extends Module {
 	@Override
-	public void paint(Graphics2D g, int width, int height) {
-		List<GroundItem> items = ReflectionHooks.getGroundItems();
+	public void paint(ReflectionHooks hooks, Graphics2D g, int width, int height) {
+		List<GroundItem> items = hooks.getGroundItems();
 
 		g.setFont(g.getFont().deriveFont(11f));
 		for (GroundItem item : items) {
-			Vector2i pos = ReflectionHooks.project(item.getX() + 0.5f, item.getY() + 0.5f, ReflectionHooks.getPlayerHeightLevel());
+			Vector2i pos = hooks.project(item.getX() + 0.5f, item.getY() + 0.5f, hooks.getPlayerHeightLevel());
 			if (pos == null) continue;
 
-			String name = ReflectionHooks.getItemName(ReflectionHooks.getItemDef(item.getId()));
+			String name = hooks.getItemName(hooks.getItemDef(item.getId()));
 			String text = name + (item.getQuantity() > 1 ? " x" + item.getQuantity() : "");
 			int offset = g.getFontMetrics().stringWidth(text) / 2;
 

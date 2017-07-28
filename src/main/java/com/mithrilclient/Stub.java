@@ -13,6 +13,9 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.URLClassLoader;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -29,6 +32,8 @@ public final class Stub extends JPanel implements AppletStub {
 	private final static int DEFAULT_WIDTH = 765, DEFAULT_HEIGHT = 503;
 	private final static Dimension DEFAULT_DIMENSION = new Dimension(DEFAULT_WIDTH, DEFAULT_HEIGHT);
 
+	private final static Path CLIENT_PATH = Paths.get("lib/client.jar");
+
 	private final MithrilClient mithrilClient;
 	private final Map<String, String> parameters = new HashMap<>();
 	private final Applet client;
@@ -41,12 +46,13 @@ public final class Stub extends JPanel implements AppletStub {
 		} catch (MalformedURLException e) {
 			throw new RuntimeException(e);
 		} catch (IOException e) {
-			e.printStackTrace();
-			// TODO handle properly
+			mithrilClient.handle(e);
 		}
 
 		try {
-			client = (Applet) Stub.class.getClassLoader().loadClass("client").newInstance();
+			@SuppressWarnings("resource")
+			URLClassLoader classLoader = new URLClassLoader(new URL[] {CLIENT_PATH.toUri().toURL()}, Stub.class.getClassLoader());
+			client = (Applet) classLoader.loadClass("client").newInstance();
 			client.setStub(this);
 
 			client.setSize(DEFAULT_WIDTH, DEFAULT_HEIGHT);
@@ -75,7 +81,7 @@ public final class Stub extends JPanel implements AppletStub {
 				@Override
 				public void componentHidden(ComponentEvent e) {}
 			});
-		} catch (InstantiationException | IllegalAccessException | ClassNotFoundException e) {
+		} catch (InstantiationException | IllegalAccessException | ClassNotFoundException | MalformedURLException e) {
 			throw new RuntimeException(e);
 		}
 	}
@@ -84,6 +90,8 @@ public final class Stub extends JPanel implements AppletStub {
 		client.init();
 		client.start();
 
+		final ReflectionHooks hooks = new ReflectionHooks(client.getClass().getClassLoader());
+
 		new Thread(() -> {
 			while (true) {
 				try {
@@ -91,9 +99,9 @@ public final class Stub extends JPanel implements AppletStub {
 
 					if (!mithrilClient.isInitialized()) continue;
 
-					Component parent = ReflectionHooks.getCanvasParent();
+					Component parent = hooks.getCanvasParent();
 					if (!(parent instanceof CanvasWrapper)) {
-						ReflectionHooks.setCanvasParent(new CanvasWrapper(mithrilClient, parent));
+						hooks.setCanvasParent(new CanvasWrapper(mithrilClient, parent, hooks));
 					}
 				} catch (Exception ex) {
 					ex.printStackTrace();

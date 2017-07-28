@@ -4,133 +4,141 @@ import java.awt.Component;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.mithrilclient.CanvasWrapper;
 import com.mithrilclient.model.GroundItem;
 import com.mithrilclient.model.Vector2i;
-import com.mithrilclient.reflection.entry.ClassEntry;
-import com.mithrilclient.reflection.entry.FieldEntry;
-import com.mithrilclient.reflection.entry.InstanceFieldEntry;
-import com.mithrilclient.reflection.entry.ObfuscatedIntInstanceFieldEntry;
-import com.mithrilclient.reflection.entry.ObfuscatedIntStaticFieldEntry;
-import com.mithrilclient.reflection.entry.StaticFieldEntry;
-import com.mithrilclient.reflection.entry.StaticMethodEntry;
+import com.mithrilclient.reflection.hook.ClassHook;
+import com.mithrilclient.reflection.hook.FieldHook;
+import com.mithrilclient.reflection.hook.MethodHook;
+import com.mithrilclient.reflection.hook.ObfuscatedIntHook;
 
 public final class ReflectionHooks {
-	private final static ClassEntry CANVAS_ENTRY_PARENT_CLASS = new ClassEntry("av");
-	private final static StaticFieldEntry<?> CANVAS_ENTRY = new StaticFieldEntry<>(CANVAS_ENTRY_PARENT_CLASS, "ac");
+	private final static int UNDEFINED = 0;
 
-	private final static ClassEntry CANVAS_CLASS = new ClassEntry("bl");
-	private final static FieldEntry<Component, ?> COMPONENT_FIELD = new FieldEntry<>(CANVAS_CLASS, CANVAS_ENTRY, "c");
+	private final FieldHook<int[]> xpLevelsHook, levelsHook, baseLevelsHook;
 
-	private final static ClassEntry CLIENT_CLASS = new ClassEntry("client");
-	private final static StaticFieldEntry<int[]> XP_FIELD = new StaticFieldEntry<>(CLIENT_CLASS, "jt");
-	private final static StaticFieldEntry<int[]> SKILLS_FIELD = new StaticFieldEntry<>(CLIENT_CLASS, "jp");
-	private final static StaticFieldEntry<int[]> BASE_SKILLS_FIELD = new StaticFieldEntry<>(CLIENT_CLASS, "jn");
+	private final FieldHook<?> canvasHook;
+	private final FieldHook<Component> componentHook;
 
-	private final static ClassEntry LOGIN_CONTROLLER_CLASS = new ClassEntry("cu");
-	private final static StaticFieldEntry<String> USERNAME_FIELD = new StaticFieldEntry<>(LOGIN_CONTROLLER_CLASS, "ad");
-	private final static StaticFieldEntry<Integer> CURSOR_FIELD_FIELD = new ObfuscatedIntStaticFieldEntry(LOGIN_CONTROLLER_CLASS, "aa", 1056528165, -155548924);
-	private final static StaticFieldEntry<Integer> LOGIN_STATE_FIELD = new ObfuscatedIntStaticFieldEntry(LOGIN_CONTROLLER_CLASS, "ak", -1832063215, 161866225);
-	private final static StaticFieldEntry<String> LOGIN_MESSAGE_FIELD = new StaticFieldEntry<>(LOGIN_CONTROLLER_CLASS, "at");
+	private final FieldHook<String> usernameHook, loginMessageHook;
+	private final FieldHook<Integer> loginCursorField, loginStateHook;
 
-	private final static ClassEntry LINKED_LIST_CLASS = new ClassEntry("ge");
-	private final static InstanceFieldEntry<?> LIST_HEAD_FIELD = new InstanceFieldEntry<>(LINKED_LIST_CLASS, "c");
+	private final FieldHook<?> listHeadHook, nextNodeHook;
+	private final FieldHook<Object[][][]> groundItemsHook;
 
-	private final static ClassEntry LINKED_NODE_CLASS = new ClassEntry("gh");
-	//private final static InstanceFieldEntry<?> PREVIOUS_NODE_FIELD = new InstanceFieldEntry<>(LINKED_NODE_CLASS, "cz");
-	private final static InstanceFieldEntry<?> NEXT_NODE_FIELD = new InstanceFieldEntry<>(LINKED_NODE_CLASS, "cr");
+	private final ClassHook itemClassHook;
+	private final FieldHook<Integer> itemIdHook, itemQuantityHook;
+	private final MethodHook<?> getItemDefHook;
+	private final FieldHook<String> itemNameHook;
 
-	private final static StaticFieldEntry<Object[][][]> GROUND_ITEMS_FIELD = new StaticFieldEntry<>(CLIENT_CLASS, "il");
+	private final FieldHook<Integer> playerHeightHook;
 
-	private final static ClassEntry ITEM_CLASS = new ClassEntry("cl");
-	private final static InstanceFieldEntry<Integer> ITEM_ID_FIELD = new ObfuscatedIntInstanceFieldEntry(ITEM_CLASS, "c", 0, -678064429);
-	private final static InstanceFieldEntry<Integer> ITEM_QUANTITY_FIELD = new ObfuscatedIntInstanceFieldEntry(ITEM_CLASS, "o", 0, -192784633);
+	private final FieldHook<Integer> cameraXHook, cameraYHook, cameraZHook, cameraCurveXHook, cameraCurveYHook;
+	private final FieldHook<Integer> viewDistanceHook, viewWidthHook, viewHeightHook;
 
-	private final static ClassEntry UNK_HEIGHT_CONTAINER = new ClassEntry("r");
-	private final static StaticFieldEntry<Integer> PLAYER_HEIGHT_LEVEL_FIELD = new ObfuscatedIntStaticFieldEntry(UNK_HEIGHT_CONTAINER, "iu", 0, -2001195991);
+	private final FieldHook<int[]> sinTableHook, cosTableHook;
 
-	private final static ClassEntry UNK_GROUND_HEIGHTS_CONTAINER = new ClassEntry("bk");
-	private final static StaticFieldEntry<int[][][]> GROUND_HEIGHTS_FIELD = new StaticFieldEntry<>(UNK_GROUND_HEIGHTS_CONTAINER, "c");
+	private final FieldHook<int[][][]> groundHeightsHook;
 
-	private final static ClassEntry RASTERIZER_CLASS = new ClassEntry("ee");
-	private final static StaticFieldEntry<int[]> SIN_LOOKUP_FIELD = new StaticFieldEntry<>(RASTERIZER_CLASS, "d");
-	private final static StaticFieldEntry<int[]> COS_LOOKUP_FIELD = new StaticFieldEntry<>(RASTERIZER_CLASS, "ap");
+	public ReflectionHooks(ClassLoader classLoader) {
+		xpLevelsHook = new FieldHook<>(classLoader, "client", "jt");
+		levelsHook = new FieldHook<>(classLoader, "client", "jp");
+		baseLevelsHook = new FieldHook<>(classLoader, "client", "jn");
 
-	private final static StaticFieldEntry<Integer> VIEW_DISTANCE_FIELD = new ObfuscatedIntStaticFieldEntry(CLIENT_CLASS, "qb", 0, 1344388827);
-	private final static StaticFieldEntry<Integer> VIEW_WIDTH_FIELD = new ObfuscatedIntStaticFieldEntry(CLIENT_CLASS, "ql", 0, -307516803);
-	private final static StaticFieldEntry<Integer> VIEW_HEIGHT_FIELD = new ObfuscatedIntStaticFieldEntry(CLIENT_CLASS, "qa", 0, -481660425);
+		canvasHook = new FieldHook<>(classLoader, "av", "ac");
+		componentHook = new FieldHook<>(classLoader, "bl", "c");
 
-	private final static ClassEntry UNK_CAMERA_X_CONTAINER = new ClassEntry("bb");
-	private final static StaticFieldEntry<Integer> CAMERA_X_FIELD = new ObfuscatedIntStaticFieldEntry(UNK_CAMERA_X_CONTAINER, "ge", 0, -607288251);
-	private final static StaticFieldEntry<Integer> CAMERA_Y_FIELD = new ObfuscatedIntStaticFieldEntry(CLIENT_CLASS, "gf", 0, 1040194387);
-	private final static ClassEntry UNK_CAMERA_Z_CONTAINER = new ClassEntry("bp");
-	private final static StaticFieldEntry<Integer> CAMERA_Z_FIELD = new ObfuscatedIntStaticFieldEntry(UNK_CAMERA_Z_CONTAINER, "gc", 0, 1872642347);
-	private final static ClassEntry UNK_CAMERA_CURVE_Y_CONTAINER = new ClassEntry("r");
-	private final static StaticFieldEntry<Integer> CAMERA_CURVE_Y_FIELD = new ObfuscatedIntStaticFieldEntry(UNK_CAMERA_CURVE_Y_CONTAINER, "gp", 0, -1467917035);
-	private final static ClassEntry UNK_CAMERA_CURVE_X_CONTAINER = new ClassEntry("ie");
-	private final static StaticFieldEntry<Integer> CAMERA_CURVE_X_FIELD = new ObfuscatedIntStaticFieldEntry(UNK_CAMERA_CURVE_X_CONTAINER, "gs", 0, -322498655);
+		usernameHook = new FieldHook<>(classLoader, "cu", "ad");
+		loginCursorField = new ObfuscatedIntHook(classLoader, "cu", "aa", -155548924, 1056528165);
+		loginStateHook = new ObfuscatedIntHook(classLoader, "cu", "ak", 161866225, -1832063215);
+		loginMessageHook = new FieldHook<>(classLoader, "cu", "at");
 
-	private final static ClassEntry UNK_GET_ITEM_DEF_CONTAINER = new ClassEntry("r");
-	private final static StaticMethodEntry<?> GET_ITEM_DEF_METHOD = new StaticMethodEntry<>(UNK_GET_ITEM_DEF_CONTAINER, "c", int.class, byte.class);
+		listHeadHook = new FieldHook<>(classLoader, "ge", "c");
+		nextNodeHook = new FieldHook<>(classLoader, "gh", "cr");
 
-	private final static ClassEntry ITEM_DEF_CLASS = new ClassEntry("ic");
-	private final static InstanceFieldEntry<String> ITEM_NAME_FIELD = new InstanceFieldEntry<>(ITEM_DEF_CLASS, "a");
+		groundItemsHook = new FieldHook<>(classLoader, "client", "il");
 
-	public static Component getCanvasParent() {
-		return COMPONENT_FIELD.get();
+		itemClassHook = new ClassHook(classLoader, "cl");
+		itemIdHook = new ObfuscatedIntHook(classLoader, "cl", "c", -678064429, UNDEFINED);
+		itemQuantityHook = new ObfuscatedIntHook(classLoader, "cl", "o", -192784633, UNDEFINED);
+
+		getItemDefHook = new MethodHook<>(classLoader, "r", "c", int.class, byte.class);
+		itemNameHook = new FieldHook<>(classLoader, "ic", "a");
+
+		playerHeightHook = new ObfuscatedIntHook(classLoader, "r", "iu", -2001195991, UNDEFINED);
+
+		cameraXHook = new ObfuscatedIntHook(classLoader, "bb", "ge", -607288251, UNDEFINED);
+		cameraYHook = new ObfuscatedIntHook(classLoader, "client", "gf", 1040194387, UNDEFINED);
+		cameraZHook = new ObfuscatedIntHook(classLoader, "bp", "gc", 1872642347, UNDEFINED);
+
+		cameraCurveXHook = new ObfuscatedIntHook(classLoader, "ie", "gs", -322498655, UNDEFINED);
+		cameraCurveYHook = new ObfuscatedIntHook(classLoader, "r", "gp", -1467917035, UNDEFINED);
+
+		viewDistanceHook = new ObfuscatedIntHook(classLoader, "client", "qb", 1344388827, UNDEFINED);
+		viewWidthHook = new ObfuscatedIntHook(classLoader, "client", "ql", -307516803, UNDEFINED);
+		viewHeightHook = new ObfuscatedIntHook(classLoader, "client", "qa", -481660425, UNDEFINED);
+
+		sinTableHook = new FieldHook<>(classLoader, "ee", "d");
+		cosTableHook = new FieldHook<>(classLoader, "ee", "ap");
+
+		groundHeightsHook = new FieldHook<>(classLoader, "bk", "c");
 	}
 
-	public static void setCanvasParent(Component component) {
-		COMPONENT_FIELD.set(component);
+	public int[] getXpLevels() {
+		return xpLevelsHook.getStatic();
 	}
 
-	public static int[] getXpLevels() {
-		return XP_FIELD.get();
+	public int[] getLevels() {
+		return levelsHook.getStatic();
 	}
 
-	public static int[] getSkills() {
-		return SKILLS_FIELD.get();
+	public int[] getBaseLevels() {
+		return baseLevelsHook.getStatic();
 	}
 
-	public static int[] getBaseSkills() {
-		return BASE_SKILLS_FIELD.get();
+	public Component getCanvasParent() {
+		return componentHook.get(canvasHook.getStatic());
 	}
 
-	public static String getUsername() {
-		return USERNAME_FIELD.get();
+	public void setCanvasParent(CanvasWrapper canvasWrapper) {
+		componentHook.set(canvasHook.getStatic(), canvasWrapper);
 	}
 
-	public static void setUsername(String username) {
-		USERNAME_FIELD.set(username);
+	public void setUsername(String username) {
+		usernameHook.set(null, username);
 	}
 
-	public static int getLoginCursorField() {
-		return CURSOR_FIELD_FIELD.get();
+	public int getLoginState() {
+		return loginStateHook.getStatic();
 	}
 
-	public static void setLoginCursorField(int field) {
-		CURSOR_FIELD_FIELD.set(field);
+	public void setLoginState(int state) {
+		loginStateHook.set(null, state);
 	}
 
-	public static int getLoginState() {
-		return LOGIN_STATE_FIELD.get();
+	public void setLoginCursorField(int field) {
+		loginCursorField.set(null, field);
 	}
 
-	public static void setLoginState(int state) {
-		LOGIN_STATE_FIELD.set(state);
+	public void setLoginMessage(String message) {
+		loginMessageHook.set(null, message);
 	}
 
-	public static void setLoginMessage(String message) {
-		LOGIN_MESSAGE_FIELD.set(message);
+	public int getPlayerHeightLevel() {
+		return playerHeightHook.getStatic();
+	}
+	public Object getItemDef(int id) {
+		return getItemDefHook.invoke(null, id, (byte) 0);
 	}
 
-	public static int getPlayerHeightLevel() {
-		return PLAYER_HEIGHT_LEVEL_FIELD.get();
+	public String getItemName(Object itemDef) {
+		return itemNameHook.get(itemDef);
 	}
 
-	public static List<GroundItem> getGroundItems() {
+	public List<GroundItem> getGroundItems() {
 		List<GroundItem> items = new ArrayList<>();
 
-		Object[][][] groundItems = GROUND_ITEMS_FIELD.get();
+		Object[][][] groundItems = groundItemsHook.getStatic();
 		int height = getPlayerHeightLevel();
 
 		for (int x = 0; x < 104; x++) {
@@ -138,21 +146,21 @@ public final class ReflectionHooks {
 				Object list = groundItems[height][x][y];
 				if (list == null) continue;
 
-				Object head = LIST_HEAD_FIELD.get(list);
-				Object node = NEXT_NODE_FIELD.get(head);
+				Object head = listHeadHook.get(list);
+				Object node = nextNodeHook.get(head);
 
 				while (node != null) {
 					if (node == head) break;
 
-					if (ITEM_CLASS.get().isInstance(node)) {
-						int id = ITEM_ID_FIELD.get(node);
-						int quantity = ITEM_QUANTITY_FIELD.get(node);
+					if (itemClassHook.get().isInstance(node)) {
+						int id = itemIdHook.get(node);
+						int quantity = itemQuantityHook.get(node);
 
 						items.add(new GroundItem(x, y, id, quantity));
 					}
 
 					Object last = node;
-					node = NEXT_NODE_FIELD.get(node);
+					node = nextNodeHook.get(node);
 					if (last == node) break;
 				}
 			}
@@ -161,8 +169,8 @@ public final class ReflectionHooks {
 		return items;
 	}
 
-	public static Vector2i project(float x, float y, int h) {
-		int[][][] pixelHeightGroundArray = GROUND_HEIGHTS_FIELD.get();
+	public Vector2i project(float x, float y, int h) {
+		int[][][] pixelHeightGroundArray = groundHeightsHook.getStatic();
 
 		int ix = (int) x;
 		int iy = (int) y;
@@ -180,17 +188,17 @@ public final class ReflectionHooks {
 				+ pixelHeightGroundArray[h][ix + 1][iy + 1] * mx >> 7;
 		int ez = (h1 * (128 - my) + h2 * my >> 7);
 
-		ex -= CAMERA_X_FIELD.get();
-		ez -= CAMERA_Z_FIELD.get();
-		ey -= CAMERA_Y_FIELD.get();
+		ex -= cameraXHook.getStatic();
+		ez -= cameraZHook.getStatic();
+		ey -= cameraYHook.getStatic();
 
-		int[] sin = SIN_LOOKUP_FIELD.get();
-		int[] cos = COS_LOOKUP_FIELD.get();
+		int[] sin = sinTableHook.getStatic();
+		int[] cos = cosTableHook.getStatic();
 
-		int sy = sin[CAMERA_CURVE_Y_FIELD.get()];
-		int cy = cos[CAMERA_CURVE_Y_FIELD.get()];
-		int sx = sin[CAMERA_CURVE_X_FIELD.get()];
-		int cx = cos[CAMERA_CURVE_X_FIELD.get()];
+		int sy = sin[cameraCurveYHook.getStatic()];
+		int cy = cos[cameraCurveYHook.getStatic()];
+		int sx = sin[cameraCurveXHook.getStatic()];
+		int cx = cos[cameraCurveXHook.getStatic()];
 
 		int t = ey * sx + ex * cx >> 16;
 		ey = ey * cx - ex * sx >> 16;
@@ -201,20 +209,12 @@ public final class ReflectionHooks {
 
 		if (ey < 50) return null;
 
-		int px = (VIEW_WIDTH_FIELD.get() / 2) + (ex * VIEW_DISTANCE_FIELD.get() / ey);
-		int py = (VIEW_HEIGHT_FIELD.get() / 2) + (ez * VIEW_DISTANCE_FIELD.get() / ey);
+		int px = (viewWidthHook.getStatic() / 2) + (ex * viewDistanceHook.getStatic() / ey);
+		int py = (viewHeightHook.getStatic() / 2) + (ez * viewDistanceHook.getStatic() / ey);
 
 		if (px == 0 && py == 0) return null;
-		if (px < 0 || py < 0 || px >= VIEW_WIDTH_FIELD.get() || py >= VIEW_HEIGHT_FIELD.get()) return null;
+		if (px < 0 || py < 0 || px >= viewWidthHook.getStatic() || py >= viewHeightHook.getStatic()) return null;
 
 		return new Vector2i(px, py);
-	}
-
-	public static Object getItemDef(int id) {
-		return GET_ITEM_DEF_METHOD.call(id, (byte) 0);
-	}
-
-	public static String getItemName(Object itemDef) {
-		return ITEM_NAME_FIELD.get(itemDef);
 	}
 }

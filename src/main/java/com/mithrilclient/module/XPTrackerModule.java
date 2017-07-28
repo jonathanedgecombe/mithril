@@ -13,11 +13,11 @@ public final class XPTrackerModule extends Module {
 	private final static Color GREEN = new Color(0, 127, 0);
 
 	@Override
-	public synchronized void paint(Graphics2D g, int width, int height) {
+	public synchronized void paint(ReflectionHooks hooks, Graphics2D g, int width, int height) {
 		int x = 5, y = 21;
 
-		int[] levels = ReflectionHooks.getBaseSkills();
-		int[] xpLevels = ReflectionHooks.getXpLevels();
+		int[] levels = hooks.getBaseLevels();
+		int[] xpLevels = hooks.getXpLevels();
 
 		long total = 0;
 		for (int skill = 0; skill < Skills.NUM_SKILLS; skill++) {

@@ -15,14 +15,9 @@ public final class PrayerPotionModule extends Module {
 	private final static Color SUPER_RESTORE_POTION_COLOUR = new Color(170, 50, 100);
 
 	@Override
-	public void tick() {
-		
-	}
-
-	@Override
-	public void paint(Graphics2D g, int width, int height) {
-		int[] currentLevels = ReflectionHooks.getSkills();
-		int[] baseLevels = ReflectionHooks.getBaseSkills();
+	public void paint(ReflectionHooks hooks, Graphics2D g, int width, int height) {
+		int[] currentLevels = hooks.getLevels();
+		int[] baseLevels = hooks.getBaseLevels();
 
 		int prayer = currentLevels[Skills.PRAYER];
 		int basePrayer = baseLevels[Skills.PRAYER];

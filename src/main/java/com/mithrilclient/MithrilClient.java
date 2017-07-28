@@ -16,6 +16,7 @@ import javax.swing.UnsupportedLookAndFeelException;
 
 import com.mithrilclient.gui.MithrilMenuBar;
 import com.mithrilclient.module.Module;
+import com.mithrilclient.reflection.ReflectionHooks;
 
 @SuppressWarnings("serial")
 public final class MithrilClient extends JFrame {
@@ -57,24 +58,42 @@ public final class MithrilClient extends JFrame {
 		return initialized;
 	}
 
-	public void tick(Graphics g) {
+	public void tick(final ReflectionHooks hooks, Graphics g) {
 		Graphics2D g2d = (Graphics2D) g;
 
 		int width = stub.getWidth();
 		int height = stub.getHeight();
 
-		if (firstTick) {
-			for (Module module : modules) {
-				module.init();
+		final MithrilClient client = this;
+
+		try {
+			if (firstTick) {
+				for (Module module : modules) {
+					module.init(hooks);
+				}
+	
+				firstTick = false;
 			}
-
-			firstTick = false;
+	
+			for (Module module : modules) {
+				module.paint(hooks, g2d, width, height);
+				executor.execute(() -> {
+					try {
+						module.tick(hooks);
+					} catch (RuntimeException e) {
+						client.handle(e);
+					}
+				});
+			}
+		} catch (RuntimeException e) {
+			handle(e);
 		}
+	}
 
-		for (Module module : modules) {
-			module.paint(g2d, width, height);
-			executor.execute(module::tick);
-		}
+	public synchronized void handle(Throwable e) {
+		e.printStackTrace();
+		System.exit(0);
+		// TODO
 	}
 
 	public static void main(String[] args) {

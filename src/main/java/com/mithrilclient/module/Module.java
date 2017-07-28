@@ -3,16 +3,18 @@ package com.mithrilclient.module;
 import java.awt.Graphics2D;
 import java.util.List;
 
+import com.mithrilclient.reflection.ReflectionHooks;
+
 public abstract class Module {
-	public void init() {
+	public void init(ReflectionHooks hooks) {
 		// do nothing
 	}
 
-	public void tick() {
+	public void tick(ReflectionHooks hooks) {
 		// do nothing
 	}
 
-	public void paint(Graphics2D g, int width, int height) {
+	public void paint(ReflectionHooks hooks, Graphics2D g, int width, int height) {
 		// do nothing
 	}
 

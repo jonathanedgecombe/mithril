@@ -11,15 +11,19 @@ import java.awt.Shape;
 import java.awt.image.ImageObserver;
 import java.text.AttributedCharacterIterator;
 
+import com.mithrilclient.reflection.ReflectionHooks;
+
 @SuppressWarnings("serial")
 public final class CanvasWrapper extends Component {
 	private final MithrilClient mithrilClient;
 	private final Component parent;
+	private final ReflectionHooks hooks;
 	private GraphicsWrapper wrapper;
 
-	public CanvasWrapper(MithrilClient mithrilClient, Component parent) {
+	public CanvasWrapper(MithrilClient mithrilClient, Component parent, ReflectionHooks hooks) {
 		this.mithrilClient = mithrilClient;
 		this.parent = parent;
+		this.hooks = hooks;
 		this.wrapper = new GraphicsWrapper(parent.getGraphics(), this);
 	}
 
@@ -41,7 +45,7 @@ public final class CanvasWrapper extends Component {
 	}
 
 	public void tick(Graphics g) {
-		mithrilClient.tick(g);
+		mithrilClient.tick(hooks, g);
 	}
 
 	public static class GraphicsWrapper extends Graphics {
