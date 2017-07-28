@@ -1,6 +1,6 @@
 # Mithril
 
-Mithril is an open source client wrapper for Old School RuneScape. Mithril provides additional features aimed at improving your gameplay experience. Mithril interacts with the runescape client solely through reflection and does not modify the game client bytecode in any way.
+Mithril is an open source client wrapper for Old School RuneScape. Mithril provides additional features aimed at improving the gameplay experience. Mithril interacts with the RuneScape client solely through reflection and does not modify the game client bytecode in any way.
 
 # Features
 
