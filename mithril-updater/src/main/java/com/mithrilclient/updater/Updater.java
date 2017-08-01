@@ -12,6 +12,7 @@ import java.util.List;
 import org.objectweb.asm.tree.ClassNode;
 import org.objectweb.asm.tree.MethodNode;
 
+import com.mithrilclient.updater.hook.CanvasHook;
 import com.mithrilclient.updater.hook.Hook;
 import com.mithrilclient.updater.hook.SkillsHook;
 
@@ -36,6 +37,7 @@ public final class Updater {
 
 	private void init() {
 		hooks.add(new SkillsHook());
+		hooks.add(new CanvasHook());
 	}
 
 	public void update() throws IOException {
