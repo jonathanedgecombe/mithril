@@ -45,9 +45,13 @@ public final class MithrilClient extends JFrame {
 	}
 
 	public void start() {
-		Module.initModules(modules);
-		stub.start();
-		setInitialized();
+		try {
+			Module.initModules(modules);
+			stub.start();
+			setInitialized();
+		} catch (Throwable e) {
+			handle(e);
+		}
 	}
 
 	private synchronized void setInitialized() {
