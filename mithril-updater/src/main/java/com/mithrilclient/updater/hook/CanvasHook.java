@@ -10,20 +10,19 @@ import org.objectweb.asm.tree.FieldInsnNode;
 import org.objectweb.asm.tree.MethodInsnNode;
 
 import com.mithrilclient.updater.regex.Instruction;
-import com.mithrilclient.updater.regex.InvokeVirtualInstruction;
 import com.mithrilclient.updater.regex.Regex;
 
 public final class CanvasHook extends Hook {
 	public CanvasHook() {
 		super(new Regex(
-				new InvokeVirtualInstruction("java/awt/Canvas.addFocusListener:(Ljava/awt/event/FocusListener;)V", false),
 				new Instruction(Opcodes.GOTO, false),
 				new Instruction(Opcodes.GETSTATIC, true),
 				new Instruction(Opcodes.CHECKCAST, false),
 				new Instruction(Opcodes.ALOAD, false),
 				new Instruction(Opcodes.GETFIELD, false),
 				new Instruction(Opcodes.LDC, false),
-				new Instruction(Opcodes.INVOKEVIRTUAL, true)
+				new Instruction(Opcodes.INVOKEVIRTUAL, true),
+				new Instruction(Opcodes.GOTO, false)
 			));
 	}
 

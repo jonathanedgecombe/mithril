@@ -11,6 +11,7 @@ public final class VarInstruction extends Instruction {
 		this.var = var;
 	}
 
+	@Override
 	public boolean matches(AbstractInsnNode instruction) {
 		if (!super.matches(instruction)) return false;
 		return ((VarInsnNode) instruction).var == var;

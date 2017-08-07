@@ -12,6 +12,7 @@ public final class InvokeVirtualInstruction extends Instruction {
 		this.methodSignature = methodSignature;
 	}
 
+	@Override
 	public boolean matches(AbstractInsnNode instruction) {
 		if (!super.matches(instruction)) return false;
 		MethodInsnNode mn = (MethodInsnNode) instruction;

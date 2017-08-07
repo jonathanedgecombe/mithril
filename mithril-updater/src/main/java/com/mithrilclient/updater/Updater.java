@@ -2,6 +2,7 @@ package com.mithrilclient.updater;
 
 import java.io.BufferedWriter;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -41,7 +42,7 @@ public final class Updater {
 	}
 
 	public void update() throws IOException {
-		try (BufferedWriter writer = Files.newBufferedWriter(outputPath)) {
+		try (BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(System.out))/*Files.newBufferedWriter(outputPath)*/) {
 			writeHeader(writer);
 
 			for (Iterator<ClassNode> it = application.iterator(); it.hasNext();) {
@@ -57,6 +58,11 @@ public final class Updater {
 			}
 
 			writeFooter(writer);
+		}
+
+		if (!hooks.isEmpty()) {
+			System.err.println(hooks);
+			throw new RuntimeException("Unconsumed hooks");
 		}
 	}
 
